@@ -1,7 +1,10 @@
+"use client"
 import React from "react";
 import newArrival1 from "@/app/image/01.jpg";
 import newArrival2 from "@/app/image/02.jpg";
-import newArrival3 from "@/app/image/03.jpg";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/app/services/firebase";
 import newArrival4 from "@/app/image/04.jpg";
 import newArrival5 from "@/app/image/05.jpg";
 import bestSelling1 from "@/app/image/06.jpg";
@@ -11,7 +14,41 @@ import bestSelling5 from "@/app/image/09.jpg";
 import bestSelling6 from "@/app/image/10.jpg";
 import bestSelling7 from "@/app/image/11.jpg";
 
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  imageUrl: string;
+}
+
+
 const page = () => {
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productCollection = collection(db, "products");
+        const productSnapshot = await getDocs(productCollection);
+        const productData = productSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Product, "id">),
+        }));
+        setProducts(productData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, []); 
+
   return (
     <div>
       {/* Navbar Section */}

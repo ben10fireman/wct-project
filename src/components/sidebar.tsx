@@ -13,8 +13,8 @@ const Sidebar = () => {
   const menuItems = [
     { name: "Dashboard", icon: dashboardIcon, link: "/admin/dashboard" },
     { name: "Customer", icon: customerIcon, link: "/admin/customer" },
-    { name: "Staff", icon: employeeIcon, link: "/admin/staff" },
-    { name: "Product", icon: productIcon, link: "/admin/product" },
+    { name: "product", icon: employeeIcon, link: "/admin/product" },
+    { name: "Categories", icon: productIcon, link: "/admin/categories" },
     { name: "Income", icon: paymentIcon, link: "/admin/income" },
     { name: "Help", icon: helpIcon, link: "/admin/help" },
     { name: "Settings", icon: settingsIcon, link: "/admin/settings" },

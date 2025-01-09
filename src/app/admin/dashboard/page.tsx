@@ -1,13 +1,12 @@
 import React from "react";
 
 // Importing image assets
-import dashboardIcon from "@/app/image/dashboard/dashboard (2).png";
+
 import customerIcon from "@/app/image/dashboard/customer.png";
 import employeeIcon from "@/app/image/dashboard/employee.png";
 import productIcon from "@/app/image/dashboard/product.png";
 import paymentIcon from "@/app/image/dashboard/payment.png";
-import helpIcon from "@/app/image/dashboard/help-web-button.png";
-import settingsIcon from "@/app/image/dashboard/settings.png";
+
 
 import searchIcon from "@/app/image/dashboard/search.png";
 import notifications from "@/app/image/dashboard/notifications.png";

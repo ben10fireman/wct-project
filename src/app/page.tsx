@@ -1,28 +1,79 @@
-import React from "react";
-import newArrival1 from "@/app/image/01.jpg";
-import newArrival2 from "@/app/image/02.jpg";
-import newArrival4 from "@/app/image/04.jpg";
-import newArrival5 from "@/app/image/05.jpg";
-import bestSelling1 from "@/app/image/06.jpg";
-import bestSelling3 from "@/app/image/07.jpg";
-import bestSelling4 from "@/app/image/08.jpg";
-import bestSelling5 from "@/app/image/09.jpg";
-import bestSelling6 from "@/app/image/10.jpg";
-import bestSelling7 from "@/app/image/11.jpg";
+"use client";
+import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/app/services/firebase";
+import BuyNowModal from "@/components/buyNow"; // Import the BuyNowModal component
 import Link from "next/link";
 
-const page = () => {
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  imageUrl: string;
+  categoryId: string; // Add categoryId to the Product interface
+}
+
+interface Category {
+  id: string;
+  type: string;
+}
+
+const Page = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productCollection = collection(db, "products");
+        const productSnapshot = await getDocs(productCollection);
+        const productData = productSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Product, "id">),
+        }));
+        setProducts(productData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const categoryCollection = collection(db, "categories");
+        const categorySnapshot = await getDocs(categoryCollection);
+        const categoryData = categorySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Category, "id">),
+        }));
+        setCategories(categoryData);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchProducts();
+    fetchCategories();
+    setLoading(false);
+  }, []);
+
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+  };
+
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.categoryId === selectedCategory)
+    : products;
+
   return (
     <div>
       {/* Navbar Section */}
       <div className="navbar bg-base-100">
         <div className="navbar-start">
           <div className="dropdown">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle"
-            >
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -46,13 +97,10 @@ const page = () => {
                 <a>Homepage</a>
               </li>
               <li>
-                <a>Women</a>
+                <a>Portfolio</a>
               </li>
               <li>
-                <a>Men</a>
-              </li>
-              <li>
-                <a>About us</a>
+                <a>About</a>
               </li>
             </ul>
           </div>
@@ -63,11 +111,8 @@ const page = () => {
             <p className="text-5xl pl-0 font-thin">Me</p>
           </a>
         </div>
-
-        {/*search bar*/}
-
-        <div className="navbar-end ">
-          <button className="btn btn-ghost btn-circle m-0 ">
+        <div className="navbar-end">
+          <button className="btn btn-ghost btn-circle">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -83,66 +128,29 @@ const page = () => {
               />
             </svg>
           </button>
-          
-         
-          <div className="flex-none">
-            <div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle m-0"
+          <button className="btn btn-ghost btn-circle">
+            <div className="indicator">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <div className="indicator">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  <span className="badge badge-sm indicator-item">8</span>
-                </div>
-              </div>
-              <div
-                tabIndex={0}
-                className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
-              >
-                <div className="card-body">
-                  <span className="text-lg font-bold">8 Items</span>
-                  <span className="text-info">Subtotal: $999</span>
-                  <div className="card-actions">
-                    <button className="btn btn-primary btn-block">
-                      View cart
-                    </button>
-                  </div>
-                </div>
-              </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
-            {/* Fixing the login link */}
-            <Link href="/log-in">
-              <button className="font-bold transform hover:scale-105 transition duration-300">
-                Login
-              </button>
-            </Link>
-            <Link href="/register">
-              <button className="font-bold transform hover:scale-105 transition duration-300 pl-[15px]">
-                Register
-              </button>
-            </Link>
-          </div>
-          ;
+          </button>
         </div>
       </div>
 
       {/* Hero Section */}
-
       <div className="flex flex-col sm:flex-row w-full relative gap-1">
         <div className="relative w-full sm:w-1/2 h-[100vw] sm:h-[110vh] overflow-hidden">
           <div className="relative w-full h-full">
@@ -163,437 +171,90 @@ const page = () => {
               alt="Men"
               className="w-full h-full object-cover"
             />
-            <button className="absolute bottom-10 right-5 text-white text-3xl sm:text-5xl lg:text-6xl font-thin sm:right-72 cursor-pointer hover:underline transform hover:scale-105 transition duration-300 hover:text-blue-300">
+            <button className="absolute bottom-10 right-5 text-white text-xl sm:text-5xl lg:text-6xl font-thin sm:right-72 cursor-pointer hover:underline transform hover:scale-105 transition duration-300 hover:text-blue-300">
               Men
             </button>
           </div>
         </div>
       </div>
 
-      {/* New Arrival Section */}
-      <div>
-        <button className="font-bold text-black text-xl p-3 cursor-pointer btn btn-ghost    ">
-          New Arrival
-        </button>
-        <div className="carousel rounded-box relative   ">
-          {/* card */}
-          <div className=" bg-pink-200  carousel-item  relative m-1   ">
-            <img src={newArrival1.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={newArrival2.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Winter hoodie
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $109.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={newArrival4.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Black shopping bag
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $49.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={newArrival5.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                White hoodie Eighty five
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $299.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={bestSelling7.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={bestSelling6.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Baggy jean
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $1000.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={bestSelling5.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Futuristic Sun glasses
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $199.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Category Filter Section */}
+      <div className="flex justify-center gap-4 p-4">
+        {categories.map((category) => (
+          <button
+            key={category.id}
+            onClick={() => handleCategoryClick(category.id)}
+            className={`px-4 py-2 border rounded-lg ${
+              selectedCategory === category.id
+                ? "bg-black text-white"
+                : "bg-white text-black"
+            } hover:bg-gray-100 transition duration-300`}
+          >
+            {category.type}
+          </button>
+        ))}
       </div>
 
       {/* New Arrival Section */}
       <div>
-        <button className="font-bold text-black text-xl p-3 cursor-pointer btn btn-ghost    ">
-          Best Seller
-        </button>
-        <div className="carousel rounded-box relative   ">
-          {/* card */}
-          <div className=" bg-pink-200  carousel-item  relative m-1   ">
-            <img src={bestSelling1.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
+      <Link href="/newArrival">
+  <button className="font-bold text-black text-xl p-3 cursor-pointer btn btn-ghost">
+    New Arrival
+  </button>
+</Link>
+        <div className="carousel rounded-box relative">
+          {loading ? (
+            <p>Loading products...</p>
+          ) : (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-pink-200 carousel-item relative m-1"
+              >
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="w-full absolute bottom-5">
+                  <p className="block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
+                    {product.name}
+                  </p>
+                  <p className="block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
+                    ${product.price}
+                  </p>
+                  <div className="flex justify-center md:justify-end pl-20 md:pr-10">
+                    <BuyNowModal product={product} />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={bestSelling3.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={bestSelling4.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={bestSelling5.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={bestSelling6.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={bestSelling7.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative m-1  ">
-            <img src={newArrival1.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
+            ))
+          )}
         </div>
       </div>
 
-      {/* New Arrival Section */}
+      {/* Footer Section */}
       <div>
-        <button className="font-bold text-black text-xl p-3 cursor-pointer btn btn-ghost    ">
-          Accessory
-        </button>
-        <div className="carousel rounded-box relative   ">
-          {/* card */}
-          <div className=" bg-pink-200  carousel-item  relative    ">
-            <img src={newArrival1.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative   ">
-            <img src={newArrival2.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative   ">
-            <img src={newArrival4.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative   ">
-            <img src={newArrival5.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative  ">
-            <img src={bestSelling7.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative   ">
-            <img src={bestSelling6.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className=" bg-pink-200  carousel-item  relative   ">
-            <img src={bestSelling5.src} alt="clothe" />
-
-            <div className="  w-full  absolute  bottom-5 ">
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2  sm:right-72">
-                Classic Oversize white Tee
-              </p>
-              <p className=" block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
-                $59.00
-              </p>
-              <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                <button className="  px-2  py-1 md:px-4  md:py-2  bg-transparent rounded-lg text-white  left-3 text-sm sm:text-base lg:text-lg font-thin hover:bg-black transform hover:scale-105 transition duration-300">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <footer className="footer bg-neutral text-neutral-content p-20">
+        <footer className="footer bg-neutral text-neutral-content p-10">
           <nav>
-            <h6 className="footer-title">Contact us</h6>
-            <a className="link link-hover">Facebook</a>
-            <a className="link link-hover">Instagram</a>
-            <a className="link link-hover">TikTok</a>
-            <a className="link link-hover">Email</a>
+            <h6 className="footer-title">Services</h6>
+            <a className="link link-hover">Branding</a>
+            <a className="link link-hover">Design</a>
+            <a className="link link-hover">Marketing</a>
+            <a className="link link-hover">Advertisement</a>
           </nav>
           <nav>
             <h6 className="footer-title">Company</h6>
             <a className="link link-hover">About us</a>
-            <a className="link link-hover">Term and Condition</a>
+            <a className="link link-hover">Contact</a>
+            <a className="link link-hover">Jobs</a>
+            <a className="link link-hover">Press kit</a>
           </nav>
           <nav>
-            <h6 className="footer-title">We Accept</h6>
-            <a className="link link-hover">ABA bank</a>
-            <a className="link link-hover">Acelida</a>
-            <a className="link link-hover">KH QR</a>
+            <h6 className="footer-title">Legal</h6>
+            <a className="link link-hover">Terms of use</a>
+            <a className="link link-hover">Privacy policy</a>
+            <a className="link link-hover">Cookie policy</a>
           </nav>
         </footer>
       </div>
@@ -601,4 +262,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
