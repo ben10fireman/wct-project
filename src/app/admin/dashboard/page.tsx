@@ -1,57 +1,25 @@
 import React from "react";
 
-import dashboard from "@/app/image/dashboard/dashboard (2).png";
-import customer from "@/app/image/dashboard/customer.png";
-import employee from "@/app/image/dashboard/employee.png";
-import product from "@/app/image/dashboard/product.png";
-import payment from "@/app/image/dashboard/payment.png";
-import helpButton from "@/app/image/dashboard/help-web-button.png";
-import setting from "@/app/image/dashboard/settings.png";
+// Importing image assets
+import dashboardIcon from "@/app/image/dashboard/dashboard (2).png";
+import customerIcon from "@/app/image/dashboard/customer.png";
+import employeeIcon from "@/app/image/dashboard/employee.png";
+import productIcon from "@/app/image/dashboard/product.png";
+import paymentIcon from "@/app/image/dashboard/payment.png";
+import helpIcon from "@/app/image/dashboard/help-web-button.png";
+import settingsIcon from "@/app/image/dashboard/settings.png";
 
 import searchIcon from "@/app/image/dashboard/search.png";
 import notifications from "@/app/image/dashboard/notifications.png";
 import userIcon from "@/app/image/dashboard/user.png";
 import infoIcon from "@/app/image/dashboard/info.png";
+import Sidebar from "@/components/sidebar";
 
 const Page = () => {
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className="lg:w-1/4 w-full bg-white shadow-md lg:h-full flex-shrink-0">
-        <div className="p-4 border-b">
-          <h1 className="text-xl font-bold text-gray-700">Brand</h1>
-        </div>
-        <ul className="space-y-4 p-4 text-gray-600">
-          <li className="flex items-center gap-4">
-            <img src={dashboard.src} alt="Dashboard" className="w-6 h-6" />
-            <span>Dashboard</span>
-          </li>
-          <li className="flex items-center gap-4">
-            <img src={customer.src} alt="Customer" className="w-6 h-6" />
-            <span>Customer</span>
-          </li>
-          <li className="flex items-center gap-4">
-            <img src={employee.src} alt="Employee" className="w-6 h-6" />
-            <span>Employee</span>
-          </li>
-          <li className="flex items-center gap-4">
-            <img src={product.src} alt="Product" className="w-6 h-6" />
-            <span>Product</span>
-          </li>
-          <li className="flex items-center gap-4">
-            <img src={payment.src} alt="Income" className="w-6 h-6" />
-            <span>Income</span>
-          </li>
-          <li className="flex items-center gap-4">
-            <img src={helpButton.src} alt="Help" className="w-6 h-6" />
-            <span>Help</span>
-          </li>
-          <li className="flex items-center gap-4">
-            <img src={setting.src} alt="Settings" className="w-6 h-6" />
-            <span>Settings</span>
-          </li>
-        </ul>
-      </div>
+      <Sidebar />
 
       {/* Main Container */}
       <div className="flex-1 flex flex-col overflow-auto">
@@ -87,28 +55,28 @@ const Page = () => {
                 <h1 className="text-xl font-bold">2194</h1>
                 <h3 className="text-sm text-gray-500">Customers</h3>
               </div>
-              <img src={customer.src} alt="Customer" className="w-10 h-10" />
+              <img src={customerIcon.src} alt="Customer" className="w-10 h-10" />
             </div>
             <div className="bg-white p-4 shadow rounded-lg flex items-center justify-between">
               <div>
                 <h1 className="text-xl font-bold">53</h1>
                 <h3 className="text-sm text-gray-500">Employees</h3>
               </div>
-              <img src={employee.src} alt="Employee" className="w-10 h-10" />
+              <img src={employeeIcon.src} alt="Employee" className="w-10 h-10" />
             </div>
             <div className="bg-white p-4 shadow rounded-lg flex items-center justify-between">
               <div>
                 <h1 className="text-xl font-bold">5</h1>
                 <h3 className="text-sm text-gray-500">Products</h3>
               </div>
-              <img src={product.src} alt="Product" className="w-10 h-10" />
+              <img src={productIcon.src} alt="Product" className="w-10 h-10" />
             </div>
             <div className="bg-white p-4 shadow rounded-lg flex items-center justify-between">
               <div>
                 <h1 className="text-xl font-bold">350000</h1>
                 <h3 className="text-sm text-gray-500">Income</h3>
               </div>
-              <img src={payment.src} alt="Income" className="w-10 h-10" />
+              <img src={paymentIcon.src} alt="Income" className="w-10 h-10" />
             </div>
           </div>
 
