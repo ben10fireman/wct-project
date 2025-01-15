@@ -69,8 +69,93 @@ const NewArrivalPage = () => {
 
   return (
     <div>
+      {/* Navbar Section */}
+      <div className="navbar bg-base-100">
+        <div className="navbar-start">
+          <div className="dropdown">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h7"
+                />
+              </svg>
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            >
+              <li>
+                <a>Homepage</a>
+              </li>
+              <li>
+                <a>Portfolio</a>
+              </li>
+              <li>
+                <a>About</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="navbar-center">
+          <a className="btn btn-ghost text-xl">
+            Buy
+            <p className="text-5xl pl-0 font-thin">Me</p>
+          </a>
+        </div>
+        <div className="navbar-end">
+          <button className="btn btn-ghost btn-circle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
+          <button className="btn btn-ghost btn-circle">
+            <div className="indicator">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              <span className="badge badge-xs badge-primary indicator-item"></span>
+            </div>
+          </button>
+        </div>
+      </div>
+
       {/* Category Filter Section */}
-      <div className="flex justify-center gap-4 p-4">
+      <div className="flex flex-wrap justify-start gap-4 p-4">
         {categories.map((category) => (
           <button
             key={category.id}
@@ -87,45 +172,75 @@ const NewArrivalPage = () => {
       </div>
 
       {/* New Arrival Section */}
-      <div>
-        <div className="carousel rounded-box relative">
-          {loading ? (
-            <p>Loading products...</p>
-          ) : (
-            filteredProducts.map((product) => (
+      <div className="p-4">
+        {loading ? (
+          <p>Loading products...</p>
+        ) : (
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+            {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="bg-pink-200 carousel-item relative m-1"
+                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 relative"
               >
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="w-full absolute bottom-5">
-                  <p className="block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
+                {/* Image Section */}
+                <div className="w-full h-80">
+                  {" "}
+                  {/* Adjusted height for taller cards */}
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* Product Name (Top Left) */}
+                <div className="absolute bottom-11 left-0 p-4">
+                  <p className="text-lg font-semibold text-white bg-black bg-opacity-30 px-2 py-1 rounded">
                     {product.name}
                   </p>
-                  <p className="block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
+                </div>
+
+                {/* Price (Bottom Left) */}
+                <div className="absolute bottom-0 left-0 p-4">
+                  <p className="text-lg font-semibold text-white bg-black bg-opacity-30 px-2 py-1 rounded">
                     ${product.price}
                   </p>
-                  <div className="flex justify-center md:justify-end pl-20 md:pr-10">
-                    <BuyNowModal product={product} />
-                  </div>
+                </div>
+
+                {/* Buy Now Button (Bottom Right) */}
+                <div className="absolute bottom-0 right-0 p-4">
+                  <BuyNowModal product={product} /> {/* Use BuyNowModal here */}
                 </div>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Back Button */}
-      <div className="flex justify-center mt-8">
-        <Link href="/">
-          <button className="bg-gray-300 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-300">
-            Back to Home
-          </button>
-        </Link>
+      {/* Footer Section */}
+      <div>
+        <footer className="footer bg-neutral text-neutral-content p-10">
+          <nav>
+            <h6 className="footer-title">Services</h6>
+            <a className="link link-hover">Branding</a>
+            <a className="link link-hover">Design</a>
+            <a className="link link-hover">Marketing</a>
+            <a className="link link-hover">Advertisement</a>
+          </nav>
+          <nav>
+            <h6 className="footer-title">Company</h6>
+            <a className="link link-hover">About us</a>
+            <a className="link link-hover">Contact</a>
+            <a className="link link-hover">Jobs</a>
+            <a className="link link-hover">Press kit</a>
+          </nav>
+          <nav>
+            <h6 className="footer-title">Legal</h6>
+            <a className="link link-hover">Terms of use</a>
+            <a className="link link-hover">Privacy policy</a>
+            <a className="link link-hover">Cookie policy</a>
+          </nav>
+        </footer>
       </div>
     </div>
   );

@@ -73,7 +73,11 @@ const Page = () => {
       <div className="navbar bg-base-100">
         <div className="navbar-start">
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -178,30 +182,89 @@ const Page = () => {
         </div>
       </div>
 
-      {/* Category Filter Section */}
-      <div className="flex justify-center gap-4 p-4">
-        {categories.map((category) => (
-          <button
-            key={category.id}
-            onClick={() => handleCategoryClick(category.id)}
-            className={`px-4 py-2 border rounded-lg ${
-              selectedCategory === category.id
-                ? "bg-black text-white"
-                : "bg-white text-black"
-            } hover:bg-gray-100 transition duration-300`}
-          >
-            {category.type}
-          </button>
-        ))}
-      </div>
-
       {/* New Arrival Section */}
       <div>
-      <Link href="/newArrival">
-  <button className="font-bold text-black text-xl p-3 cursor-pointer btn btn-ghost">
-    New Arrival
-  </button>
-</Link>
+        <Link href="/newArrival">
+          <button className="font-bold text-black text-xl p-3 cursor-pointer btn btn-ghost">
+            New Arrival
+          </button>
+        </Link>
+        <div className="carousel rounded-box relative">
+          {loading ? (
+            <p>Loading products...</p>
+          ) : (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-pink-200 carousel-item relative m-1"
+              >
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="w-full absolute bottom-5">
+                  <p className="block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
+                    {product.name}
+                  </p>
+                  <p className="block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
+                    ${product.price}
+                  </p>
+                  <div className="flex justify-center md:justify-end pl-20 md:pr-10">
+                    <BuyNowModal product={product} />
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+       {/* best selling  */}
+       <div>
+        <Link href="/newArrival">
+          <button className="font-bold text-black text-xl p-3 cursor-pointer btn btn-ghost">
+            Best Selling
+          </button>
+        </Link>
+        <div className="carousel rounded-box relative">
+          {loading ? (
+            <p>Loading products...</p>
+          ) : (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-pink-200 carousel-item relative m-1"
+              >
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="w-full absolute bottom-5">
+                  <p className="block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
+                    {product.name}
+                  </p>
+                  <p className="block text-white text-sm sm:text-base lg:text-lg font-thin m-2 sm:right-72">
+                    ${product.price}
+                  </p>
+                  <div className="flex justify-center md:justify-end pl-20 md:pr-10">
+                    <BuyNowModal product={product} />
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+       {/* Accessory Section */}
+       <div>
+        <Link href="/newArrival">
+          <button className="font-bold text-black text-xl p-3 cursor-pointer btn btn-ghost">
+            Accessory
+          </button>
+        </Link>
         <div className="carousel rounded-box relative">
           {loading ? (
             <p>Loading products...</p>

@@ -111,7 +111,7 @@ const AdminCustomerPage = () => {
         <h1 className="text-2xl font-bold">Customer Management</h1>
         <button
           onClick={() => openModal()}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-gray-100 text-black px-4 py-2 rounded hover:bg-black hover:text-white"
         >
           Add Customer
         </button>
@@ -205,7 +205,7 @@ const AdminCustomerPage = () => {
               </button>
               <button
                 onClick={handleSave}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-black hover:text"
               >
                 Save
               </button>

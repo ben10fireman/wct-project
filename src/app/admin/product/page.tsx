@@ -186,7 +186,7 @@ const AdminProductPage = () => {
       <h1 className="text-2xl font-bold mb-6">Product Management</h1>
       <button
         onClick={() => openModal()}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4"
+        className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-black hover:text-white mb-4"
       >
         Add Product
       </button>

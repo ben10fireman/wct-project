@@ -7,8 +7,6 @@ import employeeIcon from "@/app/image/dashboard/employee.png";
 import productIcon from "@/app/image/dashboard/product.png";
 import paymentIcon from "@/app/image/dashboard/payment.png";
 
-
-import searchIcon from "@/app/image/dashboard/search.png";
 import notifications from "@/app/image/dashboard/notifications.png";
 import userIcon from "@/app/image/dashboard/user.png";
 import infoIcon from "@/app/image/dashboard/info.png";
@@ -23,21 +21,9 @@ const Page = () => {
       {/* Main Container */}
       <div className="flex-1 flex flex-col overflow-auto">
         {/* Header */}
-        <div className="bg-white shadow-md flex justify-between items-center px-4 py-3">
-          <div className="flex items-center space-x-2">
-            <input
-              type="text"
-              placeholder="Search.."
-              className="border rounded-md px-3 py-1 w-full sm:w-64"
-            />
-            <button className="p-2 bg-gray-200 rounded-md">
-              <img src={searchIcon.src} alt="Search" className="w-5 h-5" />
-            </button>
-          </div>
+        <div className="bg-white shadow-md flex justify-end items-center px-4 py-3">
           <div className="flex items-center space-x-4">
-            <a href="#" className="btn bg-blue-500 text-white px-4 py-2 rounded-md">
-              Add New
-            </a>
+      
             <img src={notifications.src} alt="Notifications" className="w-6 h-6" />
             <div className="w-8 h-8 rounded-full overflow-hidden">
               <img src={userIcon.src} alt="User" />

@@ -100,12 +100,12 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product }) => {
                 <div className="flex gap-4">
                   <button
                     onClick={handleCloseModal}
-                    className="bg-gray-300 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-300"
+                    className="bg-gray-300 px-6 py-3 rounded-lg hover:bg-black hover:text-white transition duration-300"
                   >
                     Close
                   </button>
-                  <button className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">
-                    Add to Cart
+                  <button className="bg-gray-300 text-black px-6 py-3 rounded-lg hover:bg-black hover:text-white transition duration-300">
+                    Payment
                   </button>
                 </div>
               </div>
