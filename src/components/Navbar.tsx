@@ -24,21 +24,7 @@ const Navbar = () => {
 
           {/* Right Side: Links and Hamburger */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link href="/features" className="text-gray-800 hover:text-blue-500">
-              Features
-            </Link>
-            <Link href="/use-cases" className="text-gray-800 hover:text-blue-500">
-              Use Cases
-            </Link>
-            <Link href="/prices" className="text-gray-800 hover:text-blue-500">
-              Prices
-            </Link>
-            <Link href="/customers" className="text-gray-800 hover:text-blue-500">
-              Customers
-            </Link>
-            <Link href="/about-us" className="text-gray-800 hover:text-blue-500">
-              About Us
-            </Link>
+
             <button
               onClick={handleHomeClick}
               className="bg-black text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
@@ -84,37 +70,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-md">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              href="/features"
-              className="block text-gray-800 hover:text-blue-500 transition duration-300"
-            >
-              Features
-            </Link>
-            <Link
-              href="/use-cases"
-              className="block text-gray-800 hover:text-blue-500 transition duration-300"
-            >
-              Use Cases
-            </Link>
-            <Link
-              href="/prices"
-              className="block text-gray-800 hover:text-blue-500 transition duration-300"
-            >
-              Prices
-            </Link>
-            <Link
-              href="/customers"
-              className="block text-gray-800 hover:text-blue-500 transition duration-300"
-            >
-              Customers
-            </Link>
-            <Link
-              href="/about-us"
-              className="block text-gray-800 hover:text-blue-500 transition duration-300"
-            >
-              About Us
-            </Link>
+          
             <button
               onClick={handleHomeClick}
               className="block w-full text-center bg-black text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
@@ -122,7 +78,6 @@ const Navbar = () => {
               Home
             </button>
           </div>
-        </div>
       )}
     </nav>
   );
