@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/services/firebase";
 import BuyNowModal from "@/components/buyNow"; // Import the BuyNowModal component
-import Link from "next/link";
 
 interface Product {
   id: string;
@@ -12,6 +11,7 @@ interface Product {
   price: string;
   imageUrl: string;
   categoryId: string; // Add categoryId to the Product interface
+  isnew?: boolean; // Add isnew to the Product interface
 }
 
 interface Category {
@@ -24,6 +24,8 @@ const NewArrivalPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -63,9 +65,23 @@ const NewArrivalPage = () => {
     setSelectedCategory(categoryId);
   };
 
+  const handleBuyNowClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  // Filter products for new arrivals
+  const newArrivals = products.filter((product) => product.isnew);
+
+  // Filter products based on selected category
   const filteredProducts = selectedCategory
-    ? products.filter((product) => product.categoryId === selectedCategory)
-    : products;
+    ? newArrivals.filter((product) => product.categoryId === selectedCategory)
+    : newArrivals;
 
   return (
     <div>
@@ -73,11 +89,7 @@ const NewArrivalPage = () => {
       <div className="navbar bg-base-100">
         <div className="navbar-start">
           <div className="dropdown">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle"
-            >
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -101,10 +113,13 @@ const NewArrivalPage = () => {
                 <a>Homepage</a>
               </li>
               <li>
-                <a>Portfolio</a>
+                <a>Women</a>
               </li>
               <li>
-                <a>About</a>
+                <a>Men</a>
+              </li>
+              <li>
+                <a>About us</a>
               </li>
             </ul>
           </div>
@@ -151,6 +166,10 @@ const NewArrivalPage = () => {
               <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
           </button>
+          <div className="flex gap-2">
+            <button className="btn btn-primary">Login</button>
+            <button className="btn btn-secondary">Register</button>
+          </div>
         </div>
       </div>
 
@@ -209,9 +228,12 @@ const NewArrivalPage = () => {
 
                 {/* Buy Now Button (Bottom Right) */}
                 <div className="absolute bottom-0 right-0 p-4">
-                  <BuyNowModal product={product} isModalOpen={false} onClose={function (): void {
-                    throw new Error("Function not implemented.");
-                  } } /> {/* Use BuyNowModal here */}
+                  <button
+                    onClick={() => handleBuyNowClick(product)}
+                    className="bg-black text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
+                  >
+                    Buy Now
+                  </button>
                 </div>
               </div>
             ))}
@@ -219,31 +241,38 @@ const NewArrivalPage = () => {
         )}
       </div>
 
+      {/* BuyNow Modal */}
+      {isModalOpen && selectedProduct && (
+        <BuyNowModal
+          product={selectedProduct}
+          isModalOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
+
       {/* Footer Section */}
-      <div>
-        <footer className="footer bg-neutral text-neutral-content p-10">
-          <nav>
-            <h6 className="footer-title">Services</h6>
-            <a className="link link-hover">Branding</a>
-            <a className="link link-hover">Design</a>
-            <a className="link link-hover">Marketing</a>
-            <a className="link link-hover">Advertisement</a>
-          </nav>
-          <nav>
-            <h6 className="footer-title">Company</h6>
-            <a className="link link-hover">About us</a>
-            <a className="link link-hover">Contact</a>
-            <a className="link link-hover">Jobs</a>
-            <a className="link link-hover">Press kit</a>
-          </nav>
-          <nav>
-            <h6 className="footer-title">Legal</h6>
-            <a className="link link-hover">Terms of use</a>
-            <a className="link link-hover">Privacy policy</a>
-            <a className="link link-hover">Cookie policy</a>
-          </nav>
-        </footer>
-      </div>
+      <footer className="footer bg-neutral text-neutral-content p-10">
+        <nav>
+          <h6 className="footer-title">Services</h6>
+          <a className="link link-hover">Branding</a>
+          <a className="link link-hover">Design</a>
+          <a className="link link-hover">Marketing</a>
+          <a className="link link-hover">Advertisement</a>
+        </nav>
+        <nav>
+          <h6 className="footer-title">Company</h6>
+          <a className="link link-hover">About us</a>
+          <a className="link link-hover">Contact</a>
+          <a className="link link-hover">Jobs</a>
+          <a className="link link-hover">Press kit</a>
+        </nav>
+        <nav>
+          <h6 className="footer-title">Legal</h6>
+          <a className="link link-hover">Terms of use</a>
+          <a className="link link-hover">Privacy policy</a>
+          <a className="link link-hover">Cookie policy</a>
+        </nav>
+      </footer>
     </div>
   );
 };

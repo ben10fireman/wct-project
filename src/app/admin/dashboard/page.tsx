@@ -11,7 +11,6 @@ import productIcon from "@/app/image/dashboard/product.png";
 import paymentIcon from "@/app/image/dashboard/payment.png";
 import notifications from "@/app/image/dashboard/notifications.png";
 import userIcon from "@/app/image/dashboard/user.png";
-import infoIcon from "@/app/image/dashboard/info.png";
 import Sidebar from "@/components/sidebar";
 
 interface User {

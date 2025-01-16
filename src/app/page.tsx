@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/services/firebase";
 import BuyNowModal from "@/components/buyNow";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 
 interface Product {
   id: string;
@@ -81,8 +82,8 @@ const Page = () => {
     }
     if (sortBy !== "price-asc") query.set("sortBy", sortBy);
 
-    // Update the URL without causing a full page reload
-    router.replace(`${pathname}?${query.toString()}`);
+    // Update the URL without causing a full page reload or scroll to the top
+    router.replace(`${pathname}?${query.toString()}`, { scroll: false });
   }, [selectedCategory, searchQuery, priceRange, sortBy, router, pathname]);
 
   const handleCategoryClick = (categoryId: string) => {
@@ -136,9 +137,18 @@ const Page = () => {
   const bestSelling = sortedProducts.filter((product) => product.isBestselling);
   const accessories = sortedProducts.filter((product) => product.isAccessories);
 
-  const renderProductSection = (title: string, products: Product[]) => (
+  const renderProductSection = (
+    title: string,
+    products: Product[],
+    path: string
+  ) => (
     <div className="mb-8">
-      <h2 className="font-bold text-black text-xl p-3">{title}</h2>
+      {/* Make the title clickable using Link */}
+      <Link href={path}>
+        <h2 className="font-bold text-black text-xl p-3 hover:text-blue-500 cursor-pointer">
+          {title}
+        </h2>
+      </Link>
       <div className="w-full overflow-x-auto scrollbar-hide">
         <div className="flex gap-6 w-max px-4">
           {loading ? (
@@ -161,7 +171,7 @@ const Page = () => {
                   <div className="mt-2">
                     <button
                       onClick={() => handleBuyNowClick(product)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded mt-2 hover:bg-blue-600 w-full"
+                      className="bg-black text-white px-4 py-2 rounded mt-2 hover:bg-blue-600 w-full"
                     >
                       Buy Now
                     </button>
@@ -177,7 +187,7 @@ const Page = () => {
       {products.length > visibleProducts && (
         <button
           onClick={loadMoreProducts}
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="mt-4 bg-black text-white px-4 py-2 rounded-lg hover:bg-blue-600"
         >
           Load More
         </button>
@@ -265,6 +275,14 @@ const Page = () => {
               <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
           </button>
+          <div className="flex gap-2">
+            <Link href="/log-in">
+              <button className="btn btn-primary">Login</button>
+            </Link>
+            <Link href="/register">
+              <button className="btn btn-secondary">Register</button>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -324,7 +342,9 @@ const Page = () => {
         <div className="flex gap-4">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`btn ${selectedCategory === null ? "btn-primary" : "btn-secondary"}`}
+            className={`btn ${
+              selectedCategory === null ? "btn-primary" : "btn-secondary"
+            }`}
           >
             All Products
           </button>
@@ -332,7 +352,11 @@ const Page = () => {
             <button
               key={category.id}
               onClick={() => handleCategoryClick(category.id)}
-              className={`btn ${selectedCategory === category.id ? "btn-primary" : "btn-secondary"}`}
+              className={`btn ${
+                selectedCategory === category.id
+                  ? "btn-primary"
+                  : "btn-secondary"
+              }`}
             >
               {category.type}
             </button>
@@ -341,9 +365,9 @@ const Page = () => {
       </div>
 
       {/* Product Sections */}
-      {renderProductSection("New Arrival", newArrivals)}
-      {renderProductSection("Best Selling", bestSelling)}
-      {renderProductSection("Accessory", accessories)}
+      {renderProductSection("New Arrival", newArrivals, "/newArrival")}
+      {renderProductSection("Best Selling", bestSelling, "/best-selling")}
+      {renderProductSection("Accessory", accessories, "/accessories")}
 
       {/* BuyNow Modal */}
       {isModalOpen && selectedProduct && (
