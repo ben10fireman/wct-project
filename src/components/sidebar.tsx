@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link"; // Import Link from next/link
 
 // Importing image assets
@@ -9,6 +9,8 @@ import productIcon from "@/app/image/dashboard/product.png";
 import paymentIcon from "@/app/image/dashboard/payment.png";
 
 const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false); // State to toggle sidebar
+
   const menuItems = [
     { name: "Dashboard", icon: dashboardIcon, link: "/admin/dashboard" },
     { name: "Customer", icon: customerIcon, link: "/admin/customer" },
@@ -17,21 +19,52 @@ const Sidebar = () => {
     { name: "Income", icon: paymentIcon, link: "/admin/income" },
   ];
 
+  const toggleSidebar = () => setIsOpen(!isOpen);
+
   return (
-    <div className="lg:w-1/4 w-full bg-black shadow-md lg:h-full flex-shrink-0">
-      <div className="p-4 border-b">
-        <h1 className="text-xl font-bold text-white">BuyMe</h1>
+    <div className="h-full">
+      {/* Hamburger Button */}
+      <button
+        className="lg:hidden p-4 text-white bg-black fixed top-4 left-4 z-50"
+        onClick={toggleSidebar}
+      >
+        ☰
+      </button>
+
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full bg-gray-900 shadow-md transition-transform duration-300 z-40  mt-[100px]${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:static lg:w-64 w-64`}
+      >
+        <ul className="space-y-4 p-4">
+          {menuItems.map((item, index) => (
+            <Link href={item.link} key={index}>
+              <li
+                className="flex items-center gap-4 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
+                onClick={() => setIsOpen(false)} // Close sidebar on item click
+              >
+                <img
+                  src={item.icon.src}
+                  alt={item.name}
+                  className="w-6 h-6"
+                />
+                <span className="text-gray-300 hover:text-white">
+                  {item.name}
+                </span>
+              </li>
+            </Link>
+          ))}
+        </ul>
       </div>
-      <ul className="space-y-4 p-4 text-gray-600">
-        {menuItems.map((item, index) => (
-          <Link href={item.link} key={index}>
-            <li className="flex items-center gap-4 cursor-pointer hover:bg-gray-100 p-2 rounded-md">
-              <img src={item.icon.src} alt={item.name} className="w-6 h-6" />
-              <span className="text-white hover:text-black">{item.name}</span>
-            </li>
-          </Link>
-        ))}
-      </ul>
+
+      {/* Overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
     </div>
   );
 };
