@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/services/firebase";
 import BuyNowModal from "@/components/buyNow";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 
 interface Product {
   id: string;
@@ -80,9 +81,9 @@ const Page = () => {
       query.set("maxPrice", priceRange.max.toString());
     }
     if (sortBy !== "price-asc") query.set("sortBy", sortBy);
-
-    // Update the URL without causing a full page reload
-    router.replace(`${pathname}?${query.toString()}`);
+  
+    // Update the URL without causing a full page reload or scroll to the top
+    router.replace(`${pathname}?${query.toString()}`, { scroll: false });
   }, [selectedCategory, searchQuery, priceRange, sortBy, router, pathname]);
 
   const handleCategoryClick = (categoryId: string) => {
@@ -161,7 +162,7 @@ const Page = () => {
                   <div className="mt-2">
                     <button
                       onClick={() => handleBuyNowClick(product)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded mt-2 hover:bg-blue-600 w-full"
+                      className="bg-black text-white px-4 py-2 rounded mt-2 hover:bg-blue-600 w-full"
                     >
                       Buy Now
                     </button>
@@ -177,7 +178,7 @@ const Page = () => {
       {products.length > visibleProducts && (
         <button
           onClick={loadMoreProducts}
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="mt-4 bg-black text-white px-4 py-2 rounded-lg hover:bg-blue-600"
         >
           Load More
         </button>
@@ -265,6 +266,15 @@ const Page = () => {
               <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
           </button>
+          <div className="flex gap-2">
+            <Link href="/log-in">
+            <button className="btn btn-primary">Login</button>
+            </Link>
+            <Link href="/register">
+            <button className="btn btn-secondary">Register</button>
+            </Link>
+            
+          </div>
         </div>
       </div>
 
