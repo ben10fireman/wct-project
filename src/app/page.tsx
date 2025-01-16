@@ -127,8 +127,10 @@ const Page = () => {
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "price-asc") return parseFloat(a.price) - parseFloat(b.price);
-    if (sortBy === "price-desc") return parseFloat(b.price) - parseFloat(a.price);
+    if (sortBy === "price-asc")
+      return parseFloat(a.price) - parseFloat(b.price);
+    if (sortBy === "price-desc")
+      return parseFloat(b.price) - parseFloat(a.price);
     return 0;
   });
 
@@ -198,93 +200,73 @@ const Page = () => {
   return (
     <div>
       {/* Navbar Section */}
-      <div className="navbar bg-base-100">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h7"
-                />
-              </svg>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-            >
-              <li>
-                <a>Homepage</a>
-              </li>
-              <li>
-                <a>Portfolio</a>
-              </li>
-              <li>
-                <a>About</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="navbar-center">
-          <a className="btn btn-ghost text-xl">
-            Buy
-            <p className="text-5xl pl-0 font-thin">Me</p>
-          </a>
-        </div>
-        <div className="navbar-end">
-          <button className="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </button>
-          <button className="btn btn-ghost btn-circle">
-            <div className="indicator">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-              <span className="badge badge-xs badge-primary indicator-item"></span>
-            </div>
-          </button>
-          <div className="flex gap-2">
-            <Link href="/log-in">
-              <button className="btn btn-primary">Login</button>
-            </Link>
-            <Link href="/register">
-              <button className="btn btn-secondary">Register</button>
-            </Link>
-          </div>
-        </div>
+<div className="navbar bg-base-100 px-4 sm:px-6 lg:px-8 shadow-md flex justify-between items-center">
+  {/* Left Section */}
+  <div className="flex items-center gap-4">
+    {/* BuyMe Section */}
+    <a className="btn btn-ghost text-xl flex items-center">
+      Buy
+      <p className="text-5xl pl-0 font-thin">Me</p>
+    </a>
+  </div>
+
+  {/* Right Section */}
+  <div className="flex items-center gap-4">
+    {/* Search Icon */}
+    <button className="btn btn-ghost btn-circle">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+    </button>
+
+    {/* Notifications */}
+    <button className="btn btn-ghost btn-circle">
+      <div className="indicator">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+          />
+        </svg>
+        <span className="badge badge-xs badge-primary indicator-item"></span>
       </div>
+    </button>
+
+    {/* Login and Register Buttons */}
+    <div className="flex gap-2">
+      <Link href="/log-in">
+        <button className="btn btn-primary btn-sm sm:btn-md">
+          Login
+        </button>
+      </Link>
+      <Link href="/register">
+        <button className="btn btn-secondary btn-sm sm:btn-md">
+          Register
+        </button>
+      </Link>
+    </div>
+  </div>
+</div>
+
 
       {/* Hero Section */}
       <div className="flex flex-col sm:flex-row w-full relative gap-1">
@@ -322,29 +304,29 @@ const Page = () => {
             placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2 border rounded-lg"
+            className="p-2 border rounded-lg w-full sm:w-auto"
           />
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="p-2 border rounded-lg"
+            className="p-2 border rounded-lg w-full sm:w-auto"
           >
             <option value="price-asc">Price: Low to High</option>
             <option value="price-desc">Price: High to Low</option>
           </select>
           <button
             onClick={handleClearFilters}
-            className="p-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+            className="p-2 bg-gray-300 rounded-lg hover:bg-gray-400 w-full sm:w-auto"
           >
             Clear Filters
           </button>
         </div>
-        <div className="flex gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           <button
             onClick={() => setSelectedCategory(null)}
             className={`btn ${
               selectedCategory === null ? "btn-primary" : "btn-secondary"
-            }`}
+            } w-full`}
           >
             All Products
           </button>
@@ -356,7 +338,7 @@ const Page = () => {
                 selectedCategory === category.id
                   ? "btn-primary"
                   : "btn-secondary"
-              }`}
+              } w-full`}
             >
               {category.type}
             </button>

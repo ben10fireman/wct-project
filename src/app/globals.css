@@ -12,6 +12,58 @@ body {
   }
 }
 
+/* global.css */
+
+/* Ensure the filter container allows wrapping */
+.filter-container {
+  display: flex;
+  gap: 1rem; /* Consistent spacing between buttons */
+  flex-wrap: wrap; /* Allow buttons to wrap into multiple rows */
+}
+
+/* Base button styles */
+.filter-btn {
+  flex: 1 1 calc(50% - 0.5rem); /* Make buttons take up half the width minus the gap */
+  min-width: 120px; /* Minimum width for buttons */
+  padding: 8px 12px; /* Padding for smaller screens */
+  font-size: 14px; /* Font size for smaller screens */
+  text-align: center;
+  border-radius: 0.5rem; /* Rounded corners */
+  border: 1px solid transparent; /* Default border */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+/* Primary button style */
+.filter-btn-primary {
+  background-color: #000; /* Black background */
+  color: #fff; /* White text */
+}
+
+/* Secondary button style */
+.filter-btn-secondary {
+  background-color: #e2e8f0; /* Light gray background */
+  color: #000; /* Black text */
+}
+
+/* Hover effects */
+.filter-btn-primary:hover {
+  background-color: #1e40af; /* Darker blue on hover */
+}
+
+.filter-btn-secondary:hover {
+  background-color: #cbd5e1; /* Lighter gray on hover */
+}
+
+/* Media query for larger screens */
+@media (min-width: 640px) {
+  .filter-btn {
+    flex: 0 1 auto; /* Reset flex behavior for larger screens */
+    min-width: auto; /* Allow buttons to shrink/grow naturally */
+    padding: 8px 16px; /* Slightly larger padding */
+    font-size: 16px; /* Larger font size */
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
