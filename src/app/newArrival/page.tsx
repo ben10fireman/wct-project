@@ -209,7 +209,9 @@ const NewArrivalPage = () => {
 
                 {/* Buy Now Button (Bottom Right) */}
                 <div className="absolute bottom-0 right-0 p-4">
-                  <BuyNowModal product={product} /> {/* Use BuyNowModal here */}
+                  <BuyNowModal product={product} isModalOpen={false} onClose={function (): void {
+                    throw new Error("Function not implemented.");
+                  } } /> {/* Use BuyNowModal here */}
                 </div>
               </div>
             ))}

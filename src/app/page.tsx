@@ -139,20 +139,20 @@ const Page = () => {
   const renderProductSection = (title: string, products: Product[]) => (
     <div className="mb-8">
       <h2 className="font-bold text-black text-xl p-3">{title}</h2>
-      <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex gap-6">
+      <div className="w-full overflow-x-auto scrollbar-hide">
+        <div className="flex gap-6 w-max px-4">
           {loading ? (
             <p>Loading products...</p>
           ) : products.length > 0 ? (
             products.slice(0, visibleProducts).map((product) => (
               <div
                 key={product.id}
-                className="bg-white shadow-md rounded-lg p-4 flex-none w-96"
+                className="bg-white shadow-md rounded-lg p-4 flex-none w-64 sm:w-80"
               >
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="w-full h-96 object-cover rounded-lg"
+                  className="w-full h-48 sm:h-64 object-cover rounded-lg"
                 />
                 <div className="mt-4">
                   <h3 className="text-lg font-semibold">{product.name}</h3>
